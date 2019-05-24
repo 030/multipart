@@ -13,7 +13,12 @@ func readFile(f string) (string, error) {
 	return string(dat), nil
 }
 
-func multipart(f ...string) error {
+func writeField(s string) string {
+	parts := strings.Split(s, "=")
+	return parts[0] + " " + parts[1]
+}
+
+func multipartUpload(f ...string) error {
 	for _, v := range f {
 		if strings.Contains(v, "=@") {
 			parts := strings.Split(v, "=@")
