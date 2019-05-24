@@ -2,6 +2,7 @@ package utils
 
 import (
 	"io/ioutil"
+	"strings"
 )
 
 func readFile(f string) (string, error) {
@@ -14,9 +15,12 @@ func readFile(f string) (string, error) {
 
 func multipart(f ...string) error {
 	for _, v := range f {
-		_, err := ioutil.ReadFile(v)
-		if err != nil {
-			return err
+		if strings.Contains(v, "=@") {
+			parts := strings.Split(v, "=@")
+			_, err := ioutil.ReadFile(parts[1])
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

@@ -20,12 +20,17 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestMultipart(t *testing.T) {
-	err := multipart("test-files-multipart/1.txt", "test-files-multipart/2.txt", "test-files-multipart/3.txt")
+	err := multipart("maven2.asset1=@test-files-multipart/1.pom",
+		"maven2.asset1.extension=pom",
+		"maven2.asset2=@test-files-multipart/2.jar",
+		"maven2.asset2.extension=jar",
+		"maven2.asset3=@test-files-multipart/3-sources.jar",
+		"maven2.asset3.extension=jar")
 	if err != nil {
 		t.Errorf("Unexpected error; got '%v'", err)
 	}
 
-	err2 := multipart("test-files-multipart/does-not-exist.txt")
+	err2 := multipart("something.some=@test-files-multipart/does-not-exist.txt")
 	if err2 == nil {
 		t.Errorf("Expected error, got '%v'", err2)
 	}
