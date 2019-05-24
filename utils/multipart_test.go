@@ -8,7 +8,7 @@ func TestReadFile(t *testing.T) {
 		t.Errorf("Cannot read file: %v; ", err)
 	}
 	want := "helloworld"
-	if got != want {
+	if string(got) != want {
 		t.Errorf("readFile() = %s; want %s", got, want)
 	}
 
@@ -20,12 +20,12 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestMultipart(t *testing.T) {
-	err := multipartUpload("maven2.asset1=@test-files-multipart/1.pom",
+	err := multipartUpload("maven2.asset1=@test-files-multipart/file1.pom",
 		"maven2.asset1.extension=pom",
-		"maven2.asset2=@test-files-multipart/2.jar",
+		"maven2.asset2=@test-files-multipart/file1.jar",
 		"maven2.asset2.extension=jar",
-		"maven2.asset3=@test-files-multipart/3-sources.jar",
-		"maven2.asset3.extension=jar")
+		"maven2.asset3=@test-files-multipart/file1-sources.jar",
+		"maven2.asset3.extension=sources.jar")
 	if err != nil {
 		t.Errorf("Unexpected error; got '%v'", err)
 	}
