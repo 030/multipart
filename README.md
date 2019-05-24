@@ -1,5 +1,4 @@
 # go-curl
-
 [![Build Status](https://travis-ci.org/030/go-curl.svg?branch=master)](https://travis-ci.org/030/go-curl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/030/go-curl)](https://goreportcard.com/report/github.com/030/go-curl)
 ![Docker Pulls](https://img.shields.io/docker/pulls/utrecht/go-curl.svg)
@@ -24,6 +23,6 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=030_go-curl&metric=security_rating)](https://sonarcloud.io/dashboard?id=030_go-curl)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=030_go-curl&metric=sqale_index)](https://sonarcloud.io/dashboard?id=030_go-curl)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=030_go-curl&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=030_go-curl)
-[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2810/badge)](https://bestpractices.coreinfrastructure.org/projects/2810)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2810/badge)](https://bestpractices.coreinfrastructure.org/projects/2845)
 [![codecov](https://codecov.io/gh/030/go-curl/branch/master/graph/badge.svg)](https://codecov.io/gh/030/go-curl)
 [![BCH compliance](https://bettercodehub.com/edge/badge/030/go-curl?branch=master)](https://bettercodehub.com/results/030/go-curl)
