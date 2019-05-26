@@ -1,6 +1,8 @@
 package utils
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestReadFile(t *testing.T) {
 	got, err := readFile("test-files/helloworld.txt")
@@ -20,7 +22,7 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestMultipart(t *testing.T) {
-	err := multipartUpload("maven2.asset1=@test-files-multipart/file1.pom",
+	_, err := multipartBody("maven2.asset1=@test-files-multipart/file1.pom",
 		"maven2.asset1.extension=pom",
 		"maven2.asset2=@test-files-multipart/file1.jar",
 		"maven2.asset2.extension=jar",
@@ -30,7 +32,7 @@ func TestMultipart(t *testing.T) {
 		t.Errorf("Unexpected error; got '%v'", err)
 	}
 
-	err2 := multipartUpload("something.some=@test-files-multipart/does-not-exist.txt")
+	_, err2 := multipartBody("something.some=@test-files-multipart/does-not-exist.txt")
 	if err2 == nil {
 		t.Errorf("Expected error, got '%v'", err2)
 	}
