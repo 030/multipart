@@ -1,5 +1,6 @@
 # go-curl
 
+[![GoDoc Widget]][GoDoc]
 [![Build Status](https://travis-ci.org/030/go-curl.svg?branch=master)](https://travis-ci.org/030/go-curl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/030/go-curl)](https://goreportcard.com/report/github.com/030/go-curl)
 ![Docker Pulls](https://img.shields.io/docker/pulls/utrecht/go-curl.svg)
@@ -52,3 +53,6 @@ in curl (see [Testing paragraph](#testing)):
 ```
 ./integration-tests.sh
 ```
+
+[GoDoc]: https://godoc.org/github.com/030/go-curl
+[GoDoc Widget]: https://godoc.org/github.com/030/go-curl?status.svg
