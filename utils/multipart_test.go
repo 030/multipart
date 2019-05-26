@@ -47,15 +47,15 @@ func TestWriteField(t *testing.T) {
 }
 
 func TestMultipartUpload(t *testing.T) {
-	u := upload{url: "", username: "", password: ""}
-	err := u.multipartUpload()
+	u := Upload{URL: "", Username: "", Password: ""}
+	err := u.upload()
 	want := "Post : unsupported protocol scheme \"\""
 	if err.Error() != want {
 		t.Errorf("An error was expected. Received '%v'; want '%s'", err, want)
 	}
 
-	u2 := upload{url: "http://releasesoftwaremoreoften.com", username: "admin", password: "incorrect password"}
-	err2 := u2.multipartUpload()
+	u2 := Upload{URL: "http://releasesoftwaremoreoften.com", Username: "admin", Password: "incorrect password"}
+	err2 := u2.upload()
 	want2 := `HTTPStatusCode: '403'; ResponseMessage: '<html><body><h1>403 Forbidden</h1>
 Request forbidden by administrative rules.
 </body></html>

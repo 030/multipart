@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime/multipart"
@@ -15,10 +14,23 @@ import (
 var body = new(bytes.Buffer)
 var writer = multipart.NewWriter(body)
 
-type upload struct {
-	url      string
-	username string
-	password string
+// Upload struct
+type Upload struct {
+	URL      string
+	Username string
+	Password string
+}
+
+// MultipartUpload splits the string into a slice, created a multipart
+// and that is posted to an URL
+func (u Upload) MultipartUpload(s string) error {
+	args := strings.Split(s, ",")
+	multipartBody(args...)
+	err := u.upload()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func addFileToWriter(b []byte, fn, f string) error {
@@ -55,9 +67,11 @@ func writeField(s string) string {
 	return parts[0] + " " + parts[1]
 }
 
-// create the body of the multipart by writing files and key-values
 func multipartBody(f ...string) error {
+	log.Debug("The input string: ", f)
 	for _, v := range f {
+		log.Debug("The elements that reside in the input string: ", v)
+
 		if strings.Contains(v, "=@") {
 			parts := strings.Split(v, "=@")
 			b, err := ioutil.ReadFile(parts[1])
@@ -79,20 +93,16 @@ func multipartBody(f ...string) error {
 		return err
 	}
 
-	if body.String() == "" {
-		return errors.New("Body should not be empty")
-	}
-
 	return nil
 }
 
-func (u upload) multipartUpload() error {
-	req, err := http.NewRequest("POST", u.url, body)
+func (u Upload) upload() error {
+	req, err := http.NewRequest("POST", u.URL, body)
 	if err != nil {
 		return err
 	}
 	req.Header.Add("Content-Type", writer.FormDataContentType())
-	req.SetBasicAuth(u.username, u.password)
+	req.SetBasicAuth(u.Username, u.Password)
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
@@ -101,7 +111,7 @@ func (u upload) multipartUpload() error {
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
-	if (resp.StatusCode != http.StatusOK) || (err != nil) {
+	if !(resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusNoContent) || (err != nil) {
 		return fmt.Errorf("HTTPStatusCode: '%d'; ResponseMessage: '%s'; ErrorMessage: '%v'", resp.StatusCode, string(b), err)
 	}
 	return nil
