@@ -1,5 +1,6 @@
 # go-curl
 
+[![GoDoc Widget]][GoDoc]
 [![Build Status](https://travis-ci.org/030/go-curl.svg?branch=master)](https://travis-ci.org/030/go-curl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/030/go-curl)](https://goreportcard.com/report/github.com/030/go-curl)
 ![Docker Pulls](https://img.shields.io/docker/pulls/utrecht/go-curl.svg)
@@ -27,3 +28,31 @@
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/2845/badge)](https://bestpractices.coreinfrastructure.org/projects/2845)
 [![codecov](https://codecov.io/gh/030/go-curl/branch/master/graph/badge.svg)](https://codecov.io/gh/030/go-curl)
 [![BCH compliance](https://bettercodehub.com/edge/badge/030/go-curl?branch=master)](https://bettercodehub.com/results/030/go-curl)
+
+## Usage
+
+If one would like to upload a file, then the '@' character should be used like
+in curl (see [Testing paragraph](#testing)):
+
+```
+./go-curl -url \
+    http://localhost:9999/service/rest/v1/components?repository=maven-releases \
+    -user admin -pass admin123 -F \
+    "maven2.asset1=@utils/test-files-multipart/file1.pom,\
+    maven2.asset1.extension=pom,\
+    maven2.asset2=@utils/test-files-multipart/file1.jar,\
+    maven2.asset2.extension=jar,\
+    maven2.asset3=@utils/test-files-multipart/file1-sources.jar,\
+    maven2.asset3.extension=sources.jar"
+```
+
+## Testing
+
+### Integration
+
+```
+./integration-tests.sh
+```
+
+[GoDoc]: https://godoc.org/github.com/030/go-curl
+[GoDoc Widget]: https://godoc.org/github.com/030/go-curl?status.svg
