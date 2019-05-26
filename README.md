@@ -31,28 +31,12 @@
 ## Usage
 
 If one would like to upload a file, then the '@' character should be used like
-in curl (see [Testing paragraph](##testing)).
+in curl (see [Testing paragraph](#testing)).
 
 ## Testing
 
 ### Integration
 
-Start nexus:
-
 ```
-docker run -d -p 9999:8081 --name nexus sonatype/nexus3:3.16.1
-```
-
-Once nexus is up and running, run the following:
-
-```
-go run main.go -url \
-   http://localhost:9999/service/rest/v1/components?repository=maven-releases \
-   -user admin -pass admin123 -F \
-   "maven2.asset1=@utils/test-files-multipart/file1.pom,\
-   maven2.asset1.extension=pom,\
-   maven2.asset2=@utils/test-files-multipart/file1.jar,\
-   maven2.asset2.extension=jar,\
-   maven2.asset3=@utils/test-files-multipart/file1-sources.jar,\
-   maven2.asset3.extension=sources.jar"
+./integration-tests.sh
 ```

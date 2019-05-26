@@ -25,10 +25,13 @@ type Upload struct {
 // and that is posted to an URL
 func (u Upload) MultipartUpload(s string) error {
 	args := strings.Split(s, ",")
-	multipartBody(args...)
-	err := u.upload()
+	err := multipartBody(args...)
 	if err != nil {
 		return err
+	}
+	err2 := u.upload()
+	if err2 != nil {
+		return err2
 	}
 	return nil
 }
