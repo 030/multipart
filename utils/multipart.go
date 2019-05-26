@@ -56,34 +56,34 @@ func writeField(s string) string {
 }
 
 // create the body of the multipart by writing files and key-values
-func multipartBody(f ...string) (*bytes.Buffer, error) {
+func multipartBody(f ...string) error {
 	for _, v := range f {
 		if strings.Contains(v, "=@") {
 			parts := strings.Split(v, "=@")
 			b, err := ioutil.ReadFile(parts[1])
 			if err != nil {
-				return nil, err
+				return err
 			}
 			addFileToWriter(b, parts[0], parts[1])
 		} else {
 			parts := strings.Split(v, "=")
 			err := addKeyValueToWriter(parts[0], parts[1])
 			if err != nil {
-				return nil, err
+				return err
 			}
 		}
 	}
 
 	err := writer.Close()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if body.String() == "" {
-		return nil, errors.New("Body should not be empty")
+		return errors.New("Body should not be empty")
 	}
 
-	return body, nil
+	return nil
 }
 
 func (u upload) multipartUpload() error {

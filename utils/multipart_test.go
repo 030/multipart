@@ -22,7 +22,7 @@ func TestReadFile(t *testing.T) {
 }
 
 func TestMultipart(t *testing.T) {
-	_, err := multipartBody("maven2.asset1=@test-files-multipart/file1.pom",
+	err := multipartBody("maven2.asset1=@test-files-multipart/file1.pom",
 		"maven2.asset1.extension=pom",
 		"maven2.asset2=@test-files-multipart/file1.jar",
 		"maven2.asset2.extension=jar",
@@ -32,7 +32,7 @@ func TestMultipart(t *testing.T) {
 		t.Errorf("Unexpected error; got '%v'", err)
 	}
 
-	_, err2 := multipartBody("something.some=@test-files-multipart/does-not-exist.txt")
+	err2 := multipartBody("something.some=@test-files-multipart/does-not-exist.txt")
 	if err2 == nil {
 		t.Errorf("Expected error, got '%v'", err2)
 	}
@@ -54,9 +54,12 @@ func TestMultipartUpload(t *testing.T) {
 		t.Errorf("An error was expected. Received '%v'; want '%s'", err, want)
 	}
 
-	u2 := upload{url: "http://localhost:9999/service/rest/v1/components?repository=maven-releases", username: "admin", password: "incorrect password"}
+	u2 := upload{url: "http://releasesoftwaremoreoften.com", username: "admin", password: "incorrect password"}
 	err2 := u2.multipartUpload()
-	want2 := "HTTPStatusCode: '401'; ResponseMessage: ''; ErrorMessage: '<nil>'"
+	want2 := `HTTPStatusCode: '403'; ResponseMessage: '<html><body><h1>403 Forbidden</h1>
+Request forbidden by administrative rules.
+</body></html>
+'; ErrorMessage: '<nil>'`
 	if err2.Error() != want2 {
 		t.Errorf("An error was expected. Received '%v'; want '%s'", err2, want2)
 	}
