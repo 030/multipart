@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
@@ -86,7 +87,6 @@ func multipartBody(f ...string) (*bytes.Buffer, error) {
 }
 
 func (u upload) multipartUpload() error {
-	//"http://localhost:9999/service/rest/v1/components?repository=maven-releases"
 	req, err := http.NewRequest("POST", u.url, body)
 	if err != nil {
 		return err
@@ -101,12 +101,8 @@ func (u upload) multipartUpload() error {
 	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
-	if resp.StatusCode != http.StatusOK || err != nil {
-		log.WithFields(log.Fields{
-			"Error":          err,
-			"Message":        string(b),
-			"HTTPStatusCode": resp.StatusCode,
-		}).Fatal("Multipart upload failed")
+	if (resp.StatusCode != http.StatusOK) || (err != nil) {
+		return fmt.Errorf("HTTPStatusCode: '%d'; ResponseMessage: '%s'; ErrorMessage: '%v'", resp.StatusCode, string(b), err)
 	}
 	return nil
 }

@@ -45,3 +45,19 @@ func TestWriteField(t *testing.T) {
 		t.Errorf("Want '%v', got '%v'", want, got)
 	}
 }
+
+func TestMultipartUpload(t *testing.T) {
+	u := upload{url: "", username: "", password: ""}
+	err := u.multipartUpload()
+	want := "Post : unsupported protocol scheme \"\""
+	if err.Error() != want {
+		t.Errorf("An error was expected. Received '%v'; want '%s'", err, want)
+	}
+
+	u2 := upload{url: "http://localhost:9999/service/rest/v1/components?repository=maven-releases", username: "admin", password: "incorrect password"}
+	err2 := u2.multipartUpload()
+	want2 := "HTTPStatusCode: '401'; ResponseMessage: ''; ErrorMessage: '<nil>'"
+	if err2.Error() != want2 {
+		t.Errorf("An error was expected. Received '%v'; want '%s'", err2, want2)
+	}
+}
