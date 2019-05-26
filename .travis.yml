@@ -23,7 +23,8 @@ script:
   - if [ $TRAVIS_OS_NAME == linux ]; then go test -short -cover -v -coverprofile=coverage.txt -covermode=atomic ./...; fi
   - go build -o $DELIVERABLE
   - $SHA512_CMD $DELIVERABLE > ${DELIVERABLE}.sha512.txt
-  - ./integration-tests.sh $DELIVERABLE
+  - chmod +x $DELIVERABLE
+  - ./integration-tests.sh ./${DELIVERABLE}
   - if [ $TRAVIS_OS_NAME == linux ] && [ $TRAVIS_PULL_REQUEST == false ]; then sonar-scanner -Dsonar.projectKey=030_go-curl -Dsonar.sources=. -Dsonar.host.url=https://sonarcloud.io -Dsonar.coverage.exclusions=cmd/**,**/*_test.go -Dsonar.go.coverage.reportPaths=coverage.txt; fi
   - if [ $TRAVIS_OS_NAME == linux ] && [ $TRAVIS_PULL_REQUEST == false ]; then bash <(curl -s https://codecov.io/bash); fi
 deploy:
