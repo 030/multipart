@@ -1,4 +1,4 @@
-# go-curl
+# go-multipart
 
 [![GoDoc Widget]][GoDoc]
 [![Build Status](https://travis-ci.org/030/go-curl.svg?branch=master)](https://travis-ci.org/030/go-curl)
