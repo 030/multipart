@@ -32,9 +32,15 @@ func TestMultipart(t *testing.T) {
 		t.Errorf("Unexpected error; got '%v'", err)
 	}
 
-	err2 := multipartBody("something.some=@test-files-multipart/does-not-exist.txt")
-	if err2 == nil {
-		t.Errorf("Expected error, got '%v'", err2)
+	err = multipartBody("something.some=@test-files-multipart/does-not-exist.txt")
+	if err == nil {
+		t.Errorf("Expected error, got '%v'", err)
+	}
+
+	err = multipartBody("hello,world")
+	want := "The string should at least contain a '=', but was: '[hello,world]'"
+	if err.Error() != want {
+		t.Errorf("Expected error, got '%v', want: '%v'", err, want)
 	}
 }
 
@@ -46,7 +52,7 @@ func TestWriteField(t *testing.T) {
 	}
 }
 
-func TestMultipartUpload(t *testing.T) {
+func TestUpload(t *testing.T) {
 	u := Upload{URL: "", Username: "", Password: ""}
 	err := u.upload()
 	want := "Post : unsupported protocol scheme \"\""
@@ -54,13 +60,20 @@ func TestMultipartUpload(t *testing.T) {
 		t.Errorf("An error was expected. Received '%v'; want '%s'", err, want)
 	}
 
-	u2 := Upload{URL: "http://releasesoftwaremoreoften.com", Username: "admin", Password: "incorrect password"}
-	err2 := u2.upload()
-	want2 := `HTTPStatusCode: '403'; ResponseMessage: '<html><body><h1>403 Forbidden</h1>
-Request forbidden by administrative rules.
-</body></html>
-'; ErrorMessage: '<nil>'`
-	if err2.Error() != want2 {
-		t.Errorf("An error was expected. Received '%v'; want '%s'", err2, want2)
+	u = Upload{URL: "http://releasesoftwaremoreoften.com", Username: "admin", Password: "incorrect password"}
+	err = u.upload()
+	want = `HTTPStatusCode: '405'; ResponseMessage: '<html>
+<head><title>405 Not Allowed</title></head>
+<body bgcolor="white">
+<center><h1>405 Not Allowed</h1></center>
+</body>
+</html>'; ErrorMessage: '<nil>'`
+	if err.Error() != want {
+		t.Errorf("An error was expected. Got: '%v'; want: '%s'", err, want)
 	}
 }
+
+// func TestMultipartUpload(t *testing.T) {
+// 	u := Upload{URL: "", Username: "", Password: ""}
+// 	u.MultipartUpload("hello,world")
+// }

@@ -25,10 +25,12 @@ type Upload struct {
 // and that is posted to an URL
 func (u Upload) MultipartUpload(s string) error {
 	args := strings.Split(s, ",")
+	fmt.Println(args)
 	err := multipartBody(args...)
 	if err != nil {
 		return err
 	}
+	fmt.Println("CP2")
 	err2 := u.upload()
 	if err2 != nil {
 		return err2
@@ -71,19 +73,33 @@ func writeField(s string) string {
 }
 
 func multipartBody(f ...string) error {
+	fmt.Println("CP2")
 	log.Debug("The input string: ", f)
 	for _, v := range f {
 		log.Debug("The elements that reside in the input string: ", v)
 
 		if strings.Contains(v, "=@") {
+			fmt.Println("CP3")
 			parts := strings.Split(v, "=@")
+			fmt.Println("CP3a")
 			b, err := ioutil.ReadFile(parts[1])
+			fmt.Println("CP3b")
 			if err != nil {
 				return err
 			}
+			fmt.Println("CP3c")
 			addFileToWriter(b, parts[0], parts[1])
+			fmt.Println("CP3d")
 		} else {
+			fmt.Println("CP4")
+			fmt.Println(v)
 			parts := strings.Split(v, "=")
+			fmt.Println(len(parts))
+			if len(parts) == 1 {
+				return fmt.Errorf("The string should at least contain a '=', but was: '%v'", parts)
+			}
+			fmt.Println("CP4b")
+
 			err := addKeyValueToWriter(parts[0], parts[1])
 			if err != nil {
 				return err

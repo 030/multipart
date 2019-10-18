@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -eux
 
-set -e
-
-TOOL=$1
+TOOL="${1:-./go-multipart}"
 
 validate(){
     if [ -z "$TOOL" ]; then
@@ -13,14 +11,14 @@ should be run."
 }
 
 nexus(){
-    docker run -d -p 9999:8081 --name nexus sonatype/nexus3:3.16.1
+    docker run --rm -d -p 9999:8081 --name nexus sonatype/nexus3:3.16.1
 }
 
 readiness(){
     until docker logs nexus | grep 'Started Sonatype Nexus OSS'
     do
         echo "Nexus unavailable"
-        sleep 2
+        sleep 10
     done
 }
 
@@ -38,7 +36,6 @@ artifacts(){
 
 cleanup(){
     docker stop nexus
-    docker rm nexus
 }
 
 main(){
