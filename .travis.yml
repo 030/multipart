@@ -20,7 +20,6 @@ addons:
 script:
   - diff -u <(echo -n) <(gofmt -d ./)
   - export DELIVERABLE=go-multipart-${TRAVIS_OS_NAME}
-  - if [ $TRAVIS_OS_NAME == linux ]; then go test -short -cover -v -coverprofile=coverage.txt -covermode=atomic ./...; fi
   - go build -o $DELIVERABLE
   - $SHA512_CMD $DELIVERABLE > ${DELIVERABLE}.sha512.txt
   - chmod +x $DELIVERABLE
