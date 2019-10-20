@@ -139,7 +139,6 @@ func uploadResponse(req *http.Request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 	return resp, nil
 }
 
@@ -153,6 +152,7 @@ func (u Upload) upload() error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	b, err := ioutil.ReadAll(resp.Body)
 	if !(resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusNoContent) || (err != nil) {

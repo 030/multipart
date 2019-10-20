@@ -1,12 +1,12 @@
 #!/bin/bash -eux
 
-TOOL="${1:-./go-multipart}"
+TOOL="${1:-go run main.go}"
 
 validate(){
     if [ -z "$TOOL" ]; then
         echo "No deliverable defined. Assuming that 'go run main.go' 
 should be run."
-        TOOL="go run main.go"
+        TOOL="./go-multipart"
     fi
 }
 
@@ -20,6 +20,10 @@ readiness(){
         echo "Nexus unavailable"
         sleep 10
     done
+}
+
+unit(){
+    f=cover.out; if [ -f $f ]; then rm $f; fi; go test ./... -coverprofile $f && go tool cover -html $f
 }
 
 artifacts(){
@@ -43,7 +47,8 @@ main(){
     nexus
     readiness
     artifacts
-    cleanup
+    unit
 }
 
+trap cleanup EXIT
 main

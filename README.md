@@ -47,8 +47,6 @@ in curl (see [Testing paragraph](#testing)):
 
 ## Testing
 
-### Integration
-
 ```
 ./integration-tests.sh
 ```
