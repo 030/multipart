@@ -143,7 +143,7 @@ func uploadResponse(req *http.Request) (*http.Response, error) {
 }
 
 func (u Upload) upload() error {
-	req, err := u.uploadRequest()
+req, err := u.uploadRequest()
 	if err != nil {
 		return err
 	}
