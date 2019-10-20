@@ -7,8 +7,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"strings"
-
-	log "github.com/sirupsen/logrus"
 )
 
 var body = new(bytes.Buffer)
@@ -21,30 +19,65 @@ type Upload struct {
 	Password string
 }
 
-// MultipartUpload splits the string into a slice, created a multipart
+// MultipartUpload splits the string into a slice, creates a multipart
 // and that is posted to an URL
 func (u Upload) MultipartUpload(s string) error {
-	args := strings.Split(s, ",")
-	err := multipartBody(args...)
+	a := stringToSlice(s)
+
+	err := multipartBody(a)
 	if err != nil {
 		return err
 	}
-	err2 := u.upload()
-	if err2 != nil {
-		return err2
+
+	err = u.upload()
+	if err != nil {
+		return err
 	}
 	return nil
+}
+
+func stringToSlice(s string) []string {
+	a := strings.Split(s, ",")
+	return a
+}
+
+func split(s string, el string) (string, string) {
+	parts := strings.Split(s, el)
+	k := parts[0]
+	v := parts[1]
+	return k, v
+}
+
+func readFile(f string) ([]byte, error) {
+	b, err := ioutil.ReadFile(f)
+	if err != nil {
+		return nil, err
+	}
+	return b, nil
 }
 
 func addFileToWriter(b []byte, fn, f string) error {
 	part, err := writer.CreateFormFile(fn, f)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
-	_, err2 := part.Write(b)
-	if err2 != nil {
-		return err2
+	_, err = part.Write(b)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func metadataAndFile(s string) error {
+	k, v := split(s, "=@")
+	b, err := readFile(v)
+	if err != nil {
+		return err
+	}
+	err = addFileToWriter(b, k, v)
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -57,37 +90,29 @@ func addKeyValueToWriter(k, v string) error {
 	return nil
 }
 
-func readFile(f string) ([]byte, error) {
-	b, err := ioutil.ReadFile(f)
+func metadataAndExtension(s string) error {
+	k, v := split(s, "=")
+	err := addKeyValueToWriter(k, v)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return b, nil
+	return nil
 }
 
-func writeField(s string) string {
-	parts := strings.Split(s, "=")
-	return parts[0] + " " + parts[1]
-}
-
-func multipartBody(f ...string) error {
-	log.Debug("The input string: ", f)
-	for _, v := range f {
-		log.Debug("The elements that reside in the input string: ", v)
-
-		if strings.Contains(v, "=@") {
-			parts := strings.Split(v, "=@")
-			b, err := ioutil.ReadFile(parts[1])
+func multipartBody(s []string) error {
+	for _, val := range s {
+		if strings.Contains(val, "=@") {
+			err := metadataAndFile(val)
 			if err != nil {
 				return err
 			}
-			addFileToWriter(b, parts[0], parts[1])
+		} else if strings.Contains(val, "=") {
+			err := metadataAndExtension(val)
+			if err != nil {
+				return err
+			}
 		} else {
-			parts := strings.Split(v, "=")
-			err := addKeyValueToWriter(parts[0], parts[1])
-			if err != nil {
-				return err
-			}
+			return fmt.Errorf("The string should at least contain a '=', but was: '%v'", val)
 		}
 	}
 
@@ -99,15 +124,31 @@ func multipartBody(f ...string) error {
 	return nil
 }
 
-func (u Upload) upload() error {
+func (u Upload) uploadRequest() (*http.Request, error) {
 	req, err := http.NewRequest("POST", u.URL, body)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	req.Header.Add("Content-Type", writer.FormDataContentType())
 	req.SetBasicAuth(u.Username, u.Password)
+	return req, nil
+}
 
+func uploadResponse(req *http.Request) (*http.Response, error) {
 	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func (u Upload) upload() error {
+	req, err := u.uploadRequest()
+	if err != nil {
+		return err
+	}
+
+	resp, err := uploadResponse(req)
 	if err != nil {
 		return err
 	}

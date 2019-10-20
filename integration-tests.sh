@@ -1,27 +1,29 @@
-#!/bin/bash
+#!/bin/bash -eux
 
-set -e
-
-TOOL=$1
+TOOL="${1:-go run main.go}"
 
 validate(){
     if [ -z "$TOOL" ]; then
         echo "No deliverable defined. Assuming that 'go run main.go' 
 should be run."
-        TOOL="go run main.go"
+        TOOL="./go-multipart"
     fi
 }
 
 nexus(){
-    docker run -d -p 9999:8081 --name nexus sonatype/nexus3:3.16.1
+    docker run --rm -d -p 9999:8081 --name nexus sonatype/nexus3:3.16.1
 }
 
 readiness(){
     until docker logs nexus | grep 'Started Sonatype Nexus OSS'
     do
         echo "Nexus unavailable"
-        sleep 2
+        sleep 10
     done
+}
+
+unit(){
+    f=cover.out; if [ -f $f ]; then rm $f; fi; go test ./... -coverprofile $f && go tool cover -html $f
 }
 
 artifacts(){
@@ -38,7 +40,6 @@ artifacts(){
 
 cleanup(){
     docker stop nexus
-    docker rm nexus
 }
 
 main(){
@@ -46,7 +47,8 @@ main(){
     nexus
     readiness
     artifacts
-    cleanup
+    unit
 }
 
+trap cleanup EXIT
 main
