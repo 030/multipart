@@ -18,7 +18,7 @@ addons:
     token:
       secure: $SONAR_TOKEN
 script:
-  - bash < <(diff -u <(echo -n) <(gofmt -d ./))
+  - diff -u <(echo -n) <(gofmt -d ./)
   - export DELIVERABLE=go-multipart-${TRAVIS_OS_NAME}
   - go build -o $DELIVERABLE
   - $SHA512_CMD $DELIVERABLE > ${DELIVERABLE}.sha512.txt
