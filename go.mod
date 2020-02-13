@@ -1,6 +1,6 @@
 module github.com/030/go-multipart
 
-go 1.13.7
+go 1.13.8
 
 require (
 	github.com/030/go-curl v1.0.0
