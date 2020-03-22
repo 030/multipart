@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+const expPostErr string = "Post \"\": unsupported protocol scheme \"\""
+
 func TestMultipartUpload(t *testing.T) {
 	u := Upload{URL: "http://localhost:9999/service/rest/v1/components?repository=maven-releases", Username: "admin", Password: "admin123"}
 
@@ -26,7 +28,7 @@ func TestMultipartUpload(t *testing.T) {
 	// unhappy - upload should fail if endpoint is incorrect
 	u = Upload{URL: "", Username: "", Password: ""}
 	err = u.MultipartUpload("maven2.asset1.extension=pom")
-	want = "Post : unsupported protocol scheme \"\""
+	want = expPostErr
 	if err != nil {
 		if err.Error() != want {
 			t.Errorf("An error was expected. Got: '%v', want: '%s'", err, want)
@@ -37,7 +39,7 @@ func TestMultipartUpload(t *testing.T) {
 func TestUpload(t *testing.T) {
 	u := Upload{URL: "", Username: "", Password: ""}
 	err := u.upload()
-	want := "Post : unsupported protocol scheme \"\""
+	want := expPostErr
 	if err.Error() != want {
 		t.Errorf("An error was expected. Received '%v'; want '%s'", err, want)
 	}
