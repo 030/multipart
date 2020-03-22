@@ -1,4 +1,4 @@
-#!/bin/bash -eux
+#!/bin/bash -e
 
 TOOL="${1:-go run main.go}"
 

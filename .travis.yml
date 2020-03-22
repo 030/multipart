@@ -18,7 +18,7 @@ addons:
     token:
       secure: $SONAR_TOKEN
 script:
-  - if [ $TRAVIS_OS_NAME != windows ]; then diff -u <(echo -n) <(gofmt -d ./); fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.23.7-alpine golangci-lint run -v; fi
   - export DELIVERABLE=go-multipart-${TRAVIS_OS_NAME}
   - go build -o $DELIVERABLE
   - $SHA512_CMD $DELIVERABLE > ${DELIVERABLE}.sha512.txt
