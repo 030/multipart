@@ -15,8 +15,7 @@ matrix:
 addons:
   sonarcloud:
     organization: 030-github
-    token:
-      secure: $SONAR_TOKEN
+    token: $SONAR_TOKEN
 script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then docker run --rm -v $(pwd):/app -w /app golangci/golangci-lint:v1.23.7-alpine golangci-lint run -v; fi
   - export DELIVERABLE=go-multipart-${TRAVIS_OS_NAME}
