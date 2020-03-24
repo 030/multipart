@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/030/go-curl/utils"
+	"github.com/030/go-multipart/utils"
 
 	log "github.com/sirupsen/logrus"
 )
