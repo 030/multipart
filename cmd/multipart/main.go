@@ -3,8 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/030/go-multipart/utils"
-
+	"github.com/030/multipart/internal/app/multipart/utils"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -23,9 +22,7 @@ func main() {
 	}
 
 	u := utils.Upload{URL: *url, Username: *user, Password: *pass}
-
-	err := u.MultipartUpload(*elements)
-	if err != nil {
+	if err := u.MultipartUpload(*elements); err != nil {
 		log.Fatal(err)
 	}
 }
