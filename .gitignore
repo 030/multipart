@@ -1,2 +1,3 @@
 cover.out
-go-multipart
+go-build.sh
+cmd/multipart/multipart*

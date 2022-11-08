@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"mime/multipart"
 	"net/http"
+	"path/filepath"
 	"strings"
 )
 
@@ -23,21 +24,20 @@ type Upload struct {
 // and that is posted to an URL
 func (u Upload) MultipartUpload(s string) error {
 	a := stringToSlice(s)
-
-	err := multipartBody(a)
-	if err != nil {
+	if err := multipartBody(a); err != nil {
 		return err
 	}
 
-	err = u.upload()
-	if err != nil {
+	if err := u.upload(); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func stringToSlice(s string) []string {
 	a := strings.Split(s, ",")
+
 	return a
 }
 
@@ -45,14 +45,16 @@ func split(s string, el string) (string, string) {
 	parts := strings.Split(s, el)
 	k := parts[0]
 	v := parts[1]
+
 	return k, v
 }
 
 func readFile(f string) ([]byte, error) {
-	b, err := ioutil.ReadFile(f)
+	b, err := ioutil.ReadFile(filepath.Clean(f))
 	if err != nil {
 		return nil, err
 	}
+
 	return b, nil
 }
 
@@ -62,10 +64,10 @@ func addFileToWriter(b []byte, fn, f string) error {
 		return err
 	}
 
-	_, err = part.Write(b)
-	if err != nil {
+	if _, err = part.Write(b); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -75,18 +77,19 @@ func metadataAndFile(s string) error {
 	if err != nil {
 		return err
 	}
-	err = addFileToWriter(b, k, v)
-	if err != nil {
+
+	if err = addFileToWriter(b, k, v); err != nil {
 		return err
 	}
+
 	return nil
 }
 
 func addKeyValueToWriter(k, v string) error {
-	err := writer.WriteField(k, v)
-	if err != nil {
+	if err := writer.WriteField(k, v); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -112,7 +115,7 @@ func multipartBody(s []string) error {
 				return err
 			}
 		} else {
-			return fmt.Errorf("The string should at least contain a '=', but was: '%v'", val)
+			return fmt.Errorf("the string should at least contain a '=', but was: '%v'", val)
 		}
 	}
 
