@@ -53,11 +53,6 @@ jobs:
       - name: Use the value
         run: |
           echo "${{ env.multipart-deliverable }}"
-      - name: Build
-        run: ./scripts/build.sh
-        env:
-          MULTIPART_DELIVERABLE: ${{ env.multipart-deliverable }}
-          SHA512_CMD: ${{ matrix.shasum }}
       - name: Quality
         run: |
           docker run --rm -v "$PWD:/mnt" koalaman/shellcheck:v0.7.1 */*.sh -x

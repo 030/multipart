@@ -21,6 +21,7 @@ func Setup(containers []mij.DockerImage) error {
 		}(container)
 	}
 	wg.Wait()
+
 	return nil
 }
 
@@ -36,6 +37,7 @@ func Shutdown(containers []mij.DockerImage) error {
 		}(container)
 	}
 	wg.Wait()
+
 	return nil
 }
 

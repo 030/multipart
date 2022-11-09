@@ -33,26 +33,24 @@ jobs:
         run: |
           echo "multipart-deliverable=multipart-${{ matrix.os }}" >> $env:GITHUB_ENV
         if: ${{ startsWith(matrix.os, 'windows') }}go
-        # yamllint enable rule:line-length
-      - name: Use the value
-        run: |
-          echo "${{ env.multipart-deliverable }}"
-      - name: Check whether all versions have been updated
-        run: |
-          version=$(echo "${{ github.ref }}" | sed -e "s|.*\/\(.*\)$|\1|")
-          echo "Version: ${version}"
-          echo "Checking build/package/snap/snapcraft.yaml..."
-          grep ${version} build/package/snap/snapcraft.yaml
-          echo "Checking README.md..."
-          grep "multipart:${version}" README.md
-        # yamllint disable rule:line-length
-        if: ${{ startsWith(matrix.os, 'mac') || startsWith(matrix.os, 'ubuntu') }}
       - name: Create release
         run: ./scripts/build.sh
         env:
           GO_BUILD_DELIVERABLE: ${{ env.multipart-deliverable }}
           GITHUB_TAG: ${{ github.ref }}
           SHA512_CMD: ${{ matrix.shasum }}
+        if: ${{ startsWith(matrix.os, 'mac') || startsWith(matrix.os, 'ubuntu') }}
+      - name: Create release windows
+        shell: cmd
+        run: |
+          echo "GITHUB_TAG: '${{ github.ref }}'"
+          echo "MULTIPART_DELIVERABLE: '${{ env.multipart-deliverable }}'"
+          cd cmd/multipart
+          go build -buildvcs=false -ldflags "-X main.Version=${{ github.ref }}" -o "${{ env.multipart-deliverable }}"
+          sha512sum "${{ env.multipart-deliverable }}" > "${{ env.multipart-deliverable }}.sha512.txt"
+          chmod +x "${{ env.multipart-deliverable }}"
+          ls multipart-windows-2019
+        if: ${{ startsWith(matrix.os, 'windows') }}
         # yamllint enable rule:line-length
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2

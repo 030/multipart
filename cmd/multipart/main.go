@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/030/multipart/internal/app/multipart/utils"
+	"github.com/030/multipart/pkg/multipart"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -21,8 +21,8 @@ func main() {
 		log.SetReportCaller(true)
 	}
 
-	u := utils.Upload{URL: *url, Username: *user, Password: *pass}
-	if err := u.MultipartUpload(*elements); err != nil {
+	u := multipart.Upload{URL: *url, Username: *user, Password: *pass}
+	if err := u.Upload(*elements); err != nil {
 		log.Fatal(err)
 	}
 }

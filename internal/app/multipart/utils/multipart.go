@@ -1,41 +1,14 @@
 package utils
 
 import (
-	"bytes"
 	"fmt"
 	"io/ioutil"
 	"mime/multipart"
-	"net/http"
 	"path/filepath"
 	"strings"
 )
 
-var body = new(bytes.Buffer)
-var writer = multipart.NewWriter(body)
-
-// Upload struct
-type Upload struct {
-	URL      string
-	Username string
-	Password string
-}
-
-// MultipartUpload splits the string into a slice, creates a multipart
-// and that is posted to an URL
-func (u Upload) MultipartUpload(s string) error {
-	a := stringToSlice(s)
-	if err := multipartBody(a); err != nil {
-		return err
-	}
-
-	if err := u.upload(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func stringToSlice(s string) []string {
+func StringToSlice(s string) []string {
 	a := strings.Split(s, ",")
 
 	return a
@@ -58,8 +31,8 @@ func readFile(f string) ([]byte, error) {
 	return b, nil
 }
 
-func addFileToWriter(b []byte, fn, f string) error {
-	part, err := writer.CreateFormFile(fn, f)
+func addFileToWriter(w *multipart.Writer, b []byte, fn, f string) error {
+	part, err := w.CreateFormFile(fn, f)
 	if err != nil {
 		return err
 	}
@@ -71,95 +44,58 @@ func addFileToWriter(b []byte, fn, f string) error {
 	return nil
 }
 
-func metadataAndFile(s string) error {
+func metadataAndFile(w *multipart.Writer, s string) error {
 	k, v := split(s, "=@")
 	b, err := readFile(v)
 	if err != nil {
 		return err
 	}
 
-	if err = addFileToWriter(b, k, v); err != nil {
+	if err = addFileToWriter(w, b, k, v); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func addKeyValueToWriter(k, v string) error {
-	if err := writer.WriteField(k, v); err != nil {
+func addKeyValueToWriter(w *multipart.Writer, k, v string) error {
+	if err := w.WriteField(k, v); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func metadataAndExtension(s string) error {
+func metadataAndExtension(w *multipart.Writer, s string) error {
 	k, v := split(s, "=")
-	err := addKeyValueToWriter(k, v)
-	if err != nil {
+	if err := addKeyValueToWriter(w, k, v); err != nil {
 		return err
 	}
+
 	return nil
 }
 
-func multipartBody(s []string) error {
+func Body(w *multipart.Writer, s []string) error {
 	for _, val := range s {
-		if strings.Contains(val, "=@") {
-			err := metadataAndFile(val)
+		switch {
+		case strings.Contains(val, "=@"):
+			err := metadataAndFile(w, val)
 			if err != nil {
 				return err
 			}
-		} else if strings.Contains(val, "=") {
-			err := metadataAndExtension(val)
+		case strings.Contains(val, "="):
+			err := metadataAndExtension(w, val)
 			if err != nil {
 				return err
 			}
-		} else {
+		default:
 			return fmt.Errorf("the string should at least contain a '=', but was: '%v'", val)
 		}
 	}
 
-	err := writer.Close()
-	if err != nil {
+	if err := w.Close(); err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func (u Upload) uploadRequest() (*http.Request, error) {
-	req, err := http.NewRequest("POST", u.URL, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("Content-Type", writer.FormDataContentType())
-	req.SetBasicAuth(u.Username, u.Password)
-	return req, nil
-}
-
-func uploadResponse(req *http.Request) (*http.Response, error) {
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	return resp, nil
-}
-
-func (u Upload) upload() error {
-	req, err := u.uploadRequest()
-	if err != nil {
-		return err
-	}
-
-	resp, err := uploadResponse(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	b, err := ioutil.ReadAll(resp.Body)
-	if !(resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusNoContent) || (err != nil) {
-		return fmt.Errorf("HTTPStatusCode: '%d'; ResponseMessage: '%s'; ErrorMessage: '%v'", resp.StatusCode, string(b), err)
-	}
 	return nil
 }
