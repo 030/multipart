@@ -2,3 +2,4 @@ cover.out
 go-build.sh
 cmd/multipart/multipart*
 coverage.txt
+dip

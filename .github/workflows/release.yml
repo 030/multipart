@@ -23,7 +23,7 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.19.0
-        # yamllint disable rule:line-length
+      # yamllint disable rule:line-length
       - name: Set multipart deliverable environment variable
         run: |
           echo "multipart-deliverable=multipart-${{ matrix.os }}" >> $GITHUB_ENV
@@ -51,7 +51,7 @@ jobs:
           chmod +x "${{ env.multipart-deliverable }}"
           ls multipart-windows-2019
         if: ${{ startsWith(matrix.os, 'windows') }}
-        # yamllint enable rule:line-length
+      # yamllint enable rule:line-length
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:

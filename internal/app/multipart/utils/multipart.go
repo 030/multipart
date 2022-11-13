@@ -2,8 +2,8 @@ package utils
 
 import (
 	"fmt"
-	"io/ioutil"
 	"mime/multipart"
+	"os"
 	"path/filepath"
 	"strings"
 )
@@ -23,7 +23,7 @@ func split(s string, el string) (string, string) {
 }
 
 func readFile(f string) ([]byte, error) {
-	b, err := ioutil.ReadFile(filepath.Clean(f))
+	b, err := os.ReadFile(filepath.Clean(f))
 	if err != nil {
 		return nil, err
 	}
