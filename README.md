@@ -2,12 +2,13 @@
 
 [![CI](https://github.com/030/multipart/workflows/Go/badge.svg?event=push)](https://github.com/030/multipart/actions?query=workflow%3AGo)
 [![GoDoc Widget]][godoc]
-![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/030/multipart)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/030/multipart?logo=go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/030/multipart)](https://goreportcard.com/report/github.com/030/multipart)
 [![StackOverflow SE Questions](https://img.shields.io/stackexchange/stackoverflow/t/multipart.svg?logo=stackoverflow)](https://stackoverflow.com/tags/multipart)
 [![DevOps SE Questions](https://img.shields.io/stackexchange/devops/t/multipart.svg?logo=stackexchange)](https://devops.stackexchange.com/tags/multipart)
 [![ServerFault SE Questions](https://img.shields.io/stackexchange/serverfault/t/multipart.svg?logo=serverfault)](https://serverfault.com/tags/multipart)
-![Docker Pulls](https://img.shields.io/docker/pulls/utrecht/multipart.svg)
+[![Docker Pulls](https://img.shields.io/docker/pulls/utrecht/multipart?logo=docker&logoColor=white)](https://hub.docker.com/r/utrecht/multipart)
+![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/utrecht/multipart?logo=docker&logoColor=white&sort=semver)
 ![Issues](https://img.shields.io/github/issues-raw/030/multipart.svg)
 ![Pull requests](https://img.shields.io/github/issues-pr-raw/030/multipart.svg)
 ![Total downloads](https://img.shields.io/github/downloads/030/multipart/total.svg)
@@ -20,7 +21,7 @@
 ![Commit activity](https://img.shields.io/github/commit-activity/m/030/multipart.svg)
 ![Last commit](https://img.shields.io/github/last-commit/030/multipart.svg)
 ![Release date](https://img.shields.io/github/release-date/030/multipart.svg)
-![Latest Production Release Version](https://img.shields.io/github/release/030/multipart.svg)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/030/multipart?logo=github&sort=semver)](https://github.com/030/multipart/releases/latest)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=030_multipart&metric=bugs)](https://sonarcloud.io/dashboard?id=030_multipart)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=030_multipart&metric=code_smells)](https://sonarcloud.io/dashboard?id=030_multipart)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=030_multipart&metric=coverage)](https://sonarcloud.io/dashboard?id=030_multipart)
@@ -35,9 +36,13 @@
 [![codecov](https://codecov.io/gh/030/multipart/branch/main/graph/badge.svg)](https://codecov.io/gh/030/multipart)
 [![GolangCI](https://golangci.com/badges/github.com/golangci/golangci-web.svg)](https://golangci.com/r/github.com/030/multipart)
 [![Chocolatey](https://img.shields.io/chocolatey/dt/multipart)](https://chocolatey.org/packages/multipart)
+[![multipart](https://snapcraft.io//multipart/badge.svg)](https://snapcraft.io/multipart)
 [![codebeat badge](https://codebeat.co/badges/f4aa5086-a4d5-41cd-893a-5da816ee9107)](https://codebeat.co/projects/github-com-030-multipart-main)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
+[godoc]: https://godoc.org/github.com/030/multipart
+[godoc widget]: https://godoc.org/github.com/030/multipart?status.svg
 
 ## Quickstart
 
