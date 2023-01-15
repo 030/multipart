@@ -2,11 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v1.0.7"></a>
+## [v1.0.7] - 2023-01-15
+### Build
+- **deps:** Update versions.
+
+
 <a name="v1.0.6"></a>
-## [v1.0.6] - 2022-12-15
+## [v1.0.6] - 2022-12-16
 ### Build
 - **auto-updater:** Update schedule.
-- **deps:** Update versions.
 
 
 <a name="v1.0.5"></a>
@@ -42,7 +47,8 @@ This project should be imported as multipart.
 <a name="v1.0.0"></a>
 ## v1.0.0 - 2019-05-26
 
-[Unreleased]: https://github.com/030/multipart/compare/v1.0.6...HEAD
+[Unreleased]: https://github.com/030/multipart/compare/v1.0.7...HEAD
+[v1.0.7]: https://github.com/030/multipart/compare/v1.0.6...v1.0.7
 [v1.0.6]: https://github.com/030/multipart/compare/v1.0.5...v1.0.6
 [v1.0.5]: https://github.com/030/multipart/compare/v1.0.4...v1.0.5
 [v1.0.4]: https://github.com/030/multipart/compare/v1.0.3...v1.0.4
